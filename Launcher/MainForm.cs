@@ -72,7 +72,7 @@ namespace Launcher
         /// </summary>>
         private void SelectedIndexChanged(object? sender, EventArgs e)
         {
-           _btnLaunch.Enabled = _lvModules.SelectedItems.Count > 0;
+            _btnLaunch.Enabled = _lvModules.SelectedItems.Count > 0;
         }
 
         /// <summary>

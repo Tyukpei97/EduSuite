@@ -10,9 +10,9 @@ namespace Launcher
         public string Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public string RelativeExePath {  get; }
+        public string RelativeExePath { get; }
 
-        public ModuleDescriptor(string id, string name, string description,  string relativeExePath)
+        public ModuleDescriptor(string id, string name, string description, string relativeExePath)
         {
             Id = id;
             Name = name;

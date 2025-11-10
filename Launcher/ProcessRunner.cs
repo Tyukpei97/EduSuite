@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;  
+using System.IO;
 
 namespace Launcher
 {
@@ -49,7 +49,7 @@ namespace Launcher
                     /// Нам такой радости не надо и пусть лучше мы установим рабочее пространство на такой случай, иначе поведение программы может быть плачевным.
                     /// В приоритет ставим папку модуля, но если не удалось найти, то назначаем папку лаунчера.
                     /// <summary>
-                    WorkingDirectory = Path.GetDirectoryName(exeFullPath) ?? baseDir,   
+                    WorkingDirectory = Path.GetDirectoryName(exeFullPath) ?? baseDir,
                     UseShellExecute = true
                 };
 
