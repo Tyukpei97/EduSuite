@@ -9,8 +9,7 @@
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup>
-    <LangVersion>
-    </LangVersion>
+    <LangVersion>latestMajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <UseMauiEssentials>false</UseMauiEssentials>

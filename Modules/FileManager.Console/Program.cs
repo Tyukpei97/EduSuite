@@ -12,12 +12,12 @@ namespace FileManager.ConsoleApp
 
         private static readonly string DateFornat = "dd-MM-yyyy HH:mm";
 
+        // vopros 1
         private static readonly Dictionary<string, Action<IReadOnlyList<string>>> Commands =
             new(StringComparer.OrdinalIgnoreCase)
             {
                 {"help", Help },
                 {"exit", Exit },
-                {"quit", Exit },
                 {"pwd", Pwd },
                 {"ls", Ls },
                 {"cd", Cd },
@@ -27,11 +27,11 @@ namespace FileManager.ConsoleApp
 
         // ------------------------- Команды -------------------------
 
-        private static void Help(IReadOnlyList<string>_)
+        private static void Help(IReadOnlyList<string> _)
         {
             Console.WriteLine("Доступные команды:");
             Console.WriteLine("  help                — показать эту справку");
-            Console.WriteLine("  exit | quit         — выход из программы");
+            Console.WriteLine("  exit                — выход из программы");
             Console.WriteLine("  pwd                 — показать текущую директорию");
             Console.WriteLine("  ls [path]           — содержимое каталога (по умолчанию — текущая папка).");
             Console.WriteLine("                         path может быть относительным или абсолютным путём.");
@@ -39,12 +39,14 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("  mkdir <name>        — создать каталог (можно с подпапками)");
             Console.WriteLine("  touch <file>        — создать пустой файл или обновить время изменения");
         }
-        
+
+        // vopros 2
         private static void Exit(IReadOnlyList<string> _)
         {
             Environment.Exit(0);
         }
 
+        // vopros 3
         private static void Pwd(IReadOnlyList<string> _)
         {
             Console.WriteLine(_currentDirectory);
@@ -53,16 +55,19 @@ namespace FileManager.ConsoleApp
         private static void Ls(IReadOnlyList<string> args)
         {
             string target = args.Count > 0 ? args[0] : ".";
+            //vopros 4
             string full = ResolvePath(target);
 
             if (File.Exists(full))
             {
                 var fi = new FileInfo(full);
+                // vopros 5
                 PrintFileLine(fi);
                 return;
             }
 
             if (!Directory.Exists(full))
+                // vopros 6
                 throw new DirectoryNotFoundException($"Каталог не найден: {full}");
 
             var dir = new DirectoryInfo(full);
@@ -80,6 +85,7 @@ namespace FileManager.ConsoleApp
                 throw new UnauthorizedAccessException("Недостаточно прав для чтения содержимого каталога.");
             }
 
+            // vopros 7
             Array.Sort(subdirs, (a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
             Array.Sort(files, (a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
 
@@ -101,11 +107,12 @@ namespace FileManager.ConsoleApp
 
             if (pathArg == "~")
             {
+                //vopros 8
                 var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
                 if (!string.IsNullOrEmpty(home))
                     _currentDirectory = home;
-                    return;
+                return;
             }
 
             string full = ResolvePath(pathArg);
@@ -113,6 +120,7 @@ namespace FileManager.ConsoleApp
             if (!Directory.Exists(full))
                 throw new DirectoryNotFoundException($"Каталог не найден: {full}");
 
+            // vopros 9 ne poniatno kak meniaetca pytb
             _currentDirectory = full;
         }
 
@@ -262,6 +270,6 @@ namespace FileManager.ConsoleApp
                     WriteError($"Неизвестная команда: {cmd}. Введите 'help' для справки");
             }
         }
-        
+
     }
 }
