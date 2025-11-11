@@ -8,19 +8,20 @@ class Program
     {
         while (true)
         {
+            Console.WriteLine("Шифровщик/Дешифровшик 2.0");
             Console.WriteLine("\n1. Шифровать\n2. Дешифровать\n3. Выход");
-            Console.Write("Выбор: ");
+            Console.Write("Ваш выбор: ");
             string choice = Console.ReadLine();
             if (choice == "3") break;
             if (choice != "1" && choice != "2") { Console.WriteLine("Неверный выбор."); continue; }
 
             bool encrypt = choice == "1";
 
-            Console.WriteLine("\nШифры:\n1. Цезаря\n2. Виженера\n3. Замены\n4. Перестановки\n5. XOR\n6. Атбаш (Латиница)");
+            Console.WriteLine("\nШифры:\n1. Цезаря\n2. Виженера\n3. Замены\n4. Перестановки\n5. XOR\n6. Атбаш");
             Console.Write("Выбор шифра: ");
             string cipher = Console.ReadLine();
 
-            Console.Write("Текст: ");
+            Console.Write("Введите текст: ");
             string text = Console.ReadLine();
             string key = cipher != "6" ? GetInput("Ключ: ") : "";
 
@@ -28,12 +29,12 @@ class Program
             {
                 string result = cipher switch
                 {
-                    "1" => encrypt ? Caesar.Encrypt(text, int.Parse(GetInput("Сдвиг: "))) : Caesar.Decrypt(text, int.Parse(GetInput("Сдвиг: "))),
-                    "2" => encrypt ? Vigenere.Encrypt(text, key) : Vigenere.Decrypt(text, key),
-                    "3" => encrypt ? Substitution.Encrypt(text, key) : Substitution.Decrypt(text, key),
-                    "4" => encrypt ? Transposition.Encrypt(text, key) : Transposition.Decrypt(text, key),
-                    "5" => encrypt ? XOR.Encrypt(text, key) : XOR.Decrypt(text, key),
-                    "6" => Atbash.Transform(text),
+                    "1" => encrypt ? CaesarCipher.Encrypt(text, int.Parse(GetInput("Сдвиг: "))) : CaesarCipher.Decrypt(text, int.Parse(GetInput("Сдвиг: "))),
+                    "2" => encrypt ? VigenereCipher.Encrypt(text, ValidateKey(key)) : VigenereCipher.Decrypt(text, ValidateKey(key)),
+                    "3" => encrypt ? SubstitutionCipher.Encrypt(text, key) : SubstitutionCipher.Decrypt(text, key),
+                    "4" => encrypt ? TranspositionCipher.Encrypt(text, key) : TranspositionCipher.Decrypt(text, key),
+                    "5" => encrypt ? XORCipher.Encrypt(text, key) : XORCipher.Decrypt(text, key),
+                    "6" => AtbashCipher.Transform(text),
                     _ => throw new Exception("Неверный шифр.")
                 };
                 Console.WriteLine($"Результат: {result}");
@@ -43,120 +44,215 @@ class Program
     }
 
     static string GetInput(string prompt) { Console.Write(prompt); return Console.ReadLine(); }
+
+    static string ValidateKey(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key)) throw new Exception("Ключ не может быть пустым.");
+        if (!key.All(c => (c >= 'А' && c <= 'Я' || c == 'Ё') || (c >= 'A' && c <= 'Z'))) throw new Exception("Ключ должен содержать только кириллические или латинские буквы.");
+        return key.ToUpper();
+    }
 }
 
-static class Caesar
+
+
+
+// 1. Шифр Цезаря
+public static class CaesarCipher
 {
+    private static readonly string cyrillicAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+    private static readonly string latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     public static string Encrypt(string text, int shift)
     {
         if (string.IsNullOrEmpty(text)) return "";
-        char[] result = text.Select(c => char.IsLetter(c)
-            ? (char)((((char.ToUpper(c) - 'A') + shift) % 26) + (char.IsUpper(c) ? 'A' : 'a'))
-            : c).ToArray();
-        return new string(result);
+        return new string(text.Select(c =>
+        {
+            string alphabet = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicAlphabet : latinAlphabet;
+            int index = alphabet.IndexOf(char.ToUpper(c));
+            if (index >= 0)
+            {
+                shift = shift % alphabet.Length;
+                char newChar = alphabet[(index + shift) % alphabet.Length];
+                return char.IsUpper(c) ? newChar : char.ToLower(newChar);
+            }
+            return c;
+        }).ToArray());
     }
 
-    public static string Decrypt(string text, int shift) => Encrypt(text, 26 - (shift % 26));
+    public static string Decrypt(string text, int shift)
+    {
+        return Encrypt(text, -shift);
+    }
 }
 
-static class Vigenere
+
+
+
+// 2. Шифр Виженера
+public static class VigenereCipher
 {
+    private static readonly string cyrillicAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+    private static readonly string latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     public static string Encrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
-        key = key.ToUpper();
-        char[] result = new char[text.Length];
+        StringBuilder result = new StringBuilder();
         for (int i = 0, j = 0; i < text.Length; i++)
-            if (char.IsLetter(text[i]))
+        {
+            string alphabet = (text[i] >= 'А' && text[i] <= 'Я' || text[i] == 'Ё' || text[i] >= 'а' && text[i] <= 'я' || text[i] == 'ё') ? cyrillicAlphabet : latinAlphabet;
+            int index = alphabet.IndexOf(char.ToUpper(text[i]));
+            if (index >= 0)
             {
-                char baseChar = char.IsUpper(text[i]) ? 'A' : 'a';
-                result[i] = (char)((((text[i] - baseChar) + (key[j++ % key.Length] - 'A')) % 26) + baseChar);
+                int shift = alphabet.IndexOf(key[j++ % key.Length]);
+                if (shift < 0) shift = 0;
+                char newChar = alphabet[(index + shift) % alphabet.Length];
+                result.Append(char.IsUpper(text[i]) ? newChar : char.ToLower(newChar));
             }
-            else result[i] = text[i];
-        return new string(result);
+            else result.Append(text[i]);
+        }
+        return result.ToString();
     }
 
     public static string Decrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
-        key = key.ToUpper();
-        char[] result = new char[text.Length];
+        StringBuilder result = new StringBuilder();
         for (int i = 0, j = 0; i < text.Length; i++)
-            if (char.IsLetter(text[i]))
+        {
+            string alphabet = (text[i] >= 'А' && text[i] <= 'Я' || text[i] == 'Ё' || text[i] >= 'а' && text[i] <= 'я' || text[i] == 'ё') ? cyrillicAlphabet : latinAlphabet;
+            int index = alphabet.IndexOf(char.ToUpper(text[i]));
+            if (index >= 0)
             {
-                char baseChar = char.IsUpper(text[i]) ? 'A' : 'a';
-                result[i] = (char)((((text[i] - baseChar) - (key[j++ % key.Length] - 'A') + 26) % 26) + baseChar);
+                int shift = alphabet.IndexOf(key[j++ % key.Length]);
+                if (shift < 0) shift = 0;
+                char newChar = alphabet[(index - shift + alphabet.Length) % alphabet.Length];
+                result.Append(char.IsUpper(text[i]) ? newChar : char.ToLower(newChar));
             }
-            else result[i] = text[i];
-        return new string(result);
+            else result.Append(text[i]);
+        }
+        return result.ToString();
     }
 }
 
-static class Substitution
+
+
+
+// 3. Шифр замены
+public static class SubstitutionCipher
 {
-    private static readonly char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-    private static readonly char[] shuffled = alphabet.OrderBy(_ => Guid.NewGuid()).ToArray();
+    private static readonly char[] cyrillicAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ".ToCharArray();
+    private static readonly char[] latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
+    private static (char[], char[]) CreateSubstitutionMap(string key)
+    {
+        if (string.IsNullOrEmpty(key)) return (cyrillicAlphabet, latinAlphabet);
+        Random rand = new Random(key.GetHashCode());
+        return (cyrillicAlphabet.OrderBy(_ => rand.Next()).ToArray(), latinAlphabet.OrderBy(_ => rand.Next()).ToArray());
+    }
 
     public static string Encrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
-        char[] result = text.Select(c => char.IsLetter(c)
-            ? char.IsUpper(c) ? shuffled[Array.IndexOf(alphabet, char.ToUpper(c))] : char.ToLower(shuffled[Array.IndexOf(alphabet, char.ToUpper(c))])
-            : c).ToArray();
-        return new string(result);
+        var (cyrillicMap, latinMap) = CreateSubstitutionMap(key);
+        return new string(text.Select(c =>
+        {
+            char[] alphabet = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicAlphabet : latinAlphabet;
+            char[] map = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicMap : latinMap;
+            int index = Array.IndexOf(alphabet, char.ToUpper(c));
+            if (index >= 0)
+                return char.IsUpper(c) ? map[index] : char.ToLower(map[index]);
+            return c;
+        }).ToArray());
     }
 
     public static string Decrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
-        char[] result = text.Select(c => char.IsLetter(c)
-            ? char.IsUpper(c) ? alphabet[Array.IndexOf(shuffled, char.ToUpper(c))] : char.ToLower(alphabet[Array.IndexOf(shuffled, char.ToUpper(c))])
-            : c).ToArray();
-        return new string(result);
+        var (cyrillicMap, latinMap) = CreateSubstitutionMap(key);
+        char[] cyrillicReverse = new char[cyrillicAlphabet.Length];
+        char[] latinReverse = new char[latinAlphabet.Length];
+        for (int i = 0; i < cyrillicAlphabet.Length; i++)
+            cyrillicReverse[Array.IndexOf(cyrillicMap, cyrillicAlphabet[i])] = cyrillicAlphabet[i];
+        for (int i = 0; i < latinAlphabet.Length; i++)
+            latinReverse[Array.IndexOf(latinMap, latinAlphabet[i])] = latinAlphabet[i];
+
+        return new string(text.Select(c =>
+        {
+            char[] alphabet = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicAlphabet : latinAlphabet;
+            char[] map = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicReverse : latinReverse;
+            int index = Array.IndexOf(alphabet, char.ToUpper(c));
+            if (index >= 0)
+                return char.IsUpper(c) ? map[index] : char.ToLower(map[index]);
+            return c;
+        }).ToArray());
     }
 }
 
-static class Transposition
+
+
+
+// 4. Шифр перестановки
+public static class TranspositionCipher
 {
     public static string Encrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
         int cols = key.Length, rows = (int)Math.Ceiling((double)text.Length / cols);
         char[,] grid = new char[rows, cols];
-        int idx = 0;
-        for (int r = 0; r < rows; r++)
-            for (int c = 0; c < cols && idx < text.Length; c++)
-                grid[r, c] = text[idx++];
-        string result = "";
-        foreach (char k in key.OrderBy(c => c))
+        for (int i = 0, r = 0; r < rows; r++)
+            for (int c = 0; c < cols && i < text.Length; c++)
+                grid[r, c] = text[i++];
+
+        StringBuilder result = new StringBuilder();
+        foreach (int col in key.Select((c, i) => (c, i)).OrderBy(x => x.c).Select(x => x.i))
             for (int r = 0; r < rows; r++)
-                if (grid[r, key.IndexOf(k)] != '\0') result += grid[r, key.IndexOf(k)];
-        return result;
+                if (grid[r, col] != '\0')
+                    result.Append(grid[r, col]);
+        return result.ToString();
     }
 
     public static string Decrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
         int cols = key.Length, rows = (int)Math.Ceiling((double)text.Length / cols);
+        if (text.Length > rows * cols) throw new Exception("Длина текста превышает размер таблицы.");
+
+        int[] colLengths = new int[cols];
+        int remaining = text.Length;
+        for (int i = 0; i < cols; i++)
+        {
+            colLengths[i] = remaining >= rows ? rows : remaining;
+            remaining -= colLengths[i];
+        }
+
         char[,] grid = new char[rows, cols];
-        int[] order = key.Select((c, i) => (c, i)).OrderBy(x => x.c).Select(x => x.i).ToArray();
-        int idx = 0;
-        foreach (int c in order)
-            for (int r = 0; r < rows && idx < text.Length; r++)
-                grid[r, c] = text[idx++];
-        return string.Concat(Enumerable.Range(0, rows).SelectMany(r => Enumerable.Range(0, cols).Select(c => grid[r, c]).Where(c => c != '\0')));
+        int textIndex = 0;
+        foreach (int col in key.Select((c, i) => (c, i)).OrderBy(x => x.c).Select(x => x.i))
+            for (int r = 0; r < colLengths[col] && textIndex < text.Length; r++)
+                grid[r, col] = text[textIndex++];
+
+        StringBuilder result = new StringBuilder();
+        for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++)
+                if (grid[r, c] != '\0')
+                    result.Append(grid[r, c]);
+        return result.ToString();
     }
 }
 
-static class XOR
+
+
+
+// 5. Шифр XOR
+public static class XORCipher
 {
     public static string Encrypt(string text, string key)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(key)) return text;
         byte[] bytes = Encoding.UTF8.GetBytes(text);
         byte[] keyBytes = Encoding.UTF8.GetBytes(key);
-        byte[] result = bytes.Select((b, i) => (byte)(b ^ keyBytes[i % keyBytes.Length])).ToArray();
-        return Convert.ToBase64String(result);
+        return Convert.ToBase64String(bytes.Select((b, i) => (byte)(b ^ keyBytes[i % keyBytes.Length])).ToArray());
     }
 
     public static string Decrypt(string text, string key)
@@ -166,24 +262,34 @@ static class XOR
         {
             byte[] bytes = Convert.FromBase64String(text);
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
-            byte[] result = bytes.Select((b, i) => (byte)(b ^ keyBytes[i % keyBytes.Length])).ToArray();
-            return Encoding.UTF8.GetString(result);
+            return Encoding.UTF8.GetString(bytes.Select((b, i) => (byte)(b ^ keyBytes[i % keyBytes.Length])).ToArray());
         }
         catch { return "Ошибка декодирования."; }
     }
 }
 
-static class Atbash
+
+
+
+// 6. Шифр Атбаш
+public static class AtbashCipher
 {
-    private static readonly char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-    private static readonly char[] reversed = alphabet.Reverse().ToArray();
+    private static readonly char[] cyrillicAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ".ToCharArray();
+    private static readonly char[] cyrillicReversed = cyrillicAlphabet.Reverse().ToArray();
+    private static readonly char[] latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+    private static readonly char[] latinReversed = latinAlphabet.Reverse().ToArray();
 
     public static string Transform(string text)
     {
         if (string.IsNullOrEmpty(text)) return "";
-        char[] result = text.Select(c => char.IsLetter(c)
-            ? char.IsUpper(c) ? reversed[Array.IndexOf(alphabet, char.ToUpper(c))] : char.ToLower(reversed[Array.IndexOf(alphabet, char.ToUpper(c))])
-            : c).ToArray();
-        return new string(result);
+        return new string(text.Select(c =>
+        {
+            char[] alphabet = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicAlphabet : latinAlphabet;
+            char[] reversed = (c >= 'А' && c <= 'Я' || c == 'Ё' || c >= 'а' && c <= 'я' || c == 'ё') ? cyrillicReversed : latinReversed;
+            int index = Array.IndexOf(alphabet, char.ToUpper(c));
+            if (index >= 0)
+                return char.IsUpper(c) ? reversed[index] : char.ToLower(reversed[index]);
+            return c;
+        }).ToArray());
     }
 }
