@@ -12,7 +12,6 @@ namespace FileManager.ConsoleApp
 
         private static readonly string DateFornat = "dd-MM-yyyy HH:mm";
 
-        // vopros 1
         private static readonly Dictionary<string, Action<IReadOnlyList<string>>> Commands =
             new(StringComparer.OrdinalIgnoreCase)
             {
@@ -40,13 +39,11 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("  touch <file>        — создать пустой файл или обновить время изменения");
         }
 
-        // vopros 2
         private static void Exit(IReadOnlyList<string> _)
         {
             Environment.Exit(0);
         }
 
-        // vopros 3
         private static void Pwd(IReadOnlyList<string> _)
         {
             Console.WriteLine(_currentDirectory);
@@ -55,19 +52,16 @@ namespace FileManager.ConsoleApp
         private static void Ls(IReadOnlyList<string> args)
         {
             string target = args.Count > 0 ? args[0] : ".";
-            //vopros 4
             string full = ResolvePath(target);
 
             if (File.Exists(full))
             {
                 var fi = new FileInfo(full);
-                // vopros 5
                 PrintFileLine(fi);
                 return;
             }
 
             if (!Directory.Exists(full))
-                // vopros 6
                 throw new DirectoryNotFoundException($"Каталог не найден: {full}");
 
             var dir = new DirectoryInfo(full);
@@ -85,7 +79,6 @@ namespace FileManager.ConsoleApp
                 throw new UnauthorizedAccessException("Недостаточно прав для чтения содержимого каталога.");
             }
 
-            // vopros 7
             Array.Sort(subdirs, (a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
             Array.Sort(files, (a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
 
@@ -107,7 +100,6 @@ namespace FileManager.ConsoleApp
 
             if (pathArg == "~")
             {
-                //vopros 8
                 var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
                 if (!string.IsNullOrEmpty(home))
@@ -120,15 +112,13 @@ namespace FileManager.ConsoleApp
             if (!Directory.Exists(full))
                 throw new DirectoryNotFoundException($"Каталог не найден: {full}");
 
-            // vopros 9 ne poniatno kak meniaetca pytb
             _currentDirectory = full;
         }
-
 
         private static void MkDir(IReadOnlyList<string> args)
         {
             if (args.Count == 0)
-                throw new ArgumentException("Укажите имся каталога: mkdir <name>");
+                throw new ArgumentException("Укажите имя каталога: mkdir <name>");
 
             string full = ResolvePath(args[0]);
 
@@ -142,7 +132,7 @@ namespace FileManager.ConsoleApp
 
             string full = ResolvePath(args[0]);
 
-            if (!Directory.Exists(full))
+            if (Directory.Exists(full))
                 throw new IOException("Укажите каталог, а не файл");
 
             if (File.Exists(full))
