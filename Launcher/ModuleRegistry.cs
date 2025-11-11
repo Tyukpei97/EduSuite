@@ -16,22 +16,20 @@ namespace Launcher
                 new ModuleDescriptor(
                     id: "FileManager.Console",
                     name: "Консольный файловый менеджер",
-                    description: "Консольный файловый менеджер (Задание 1)",
+                    description: "Команды: help, exit/quit, pwd, ls, cd, mkdir, touch.",
                     relativeExePath: @"FileManager.Console\bin\Debug\net8.0\FileManager.Console.exe"),
 
                 new ModuleDescriptor(
                     id: "Encryptor.Console",
-                    name: "Шифровщик/дешифровщик",
-                    description: "Шифровщик/дешифровщик по 6 разным шифрам (Задание 1)",
+                    name: "Шифровщик/дешифровщик (заготовка)",
+                    description: "Пустой модуль для демонстрации подключения.",
                     relativeExePath: @"Encryptor.Console\bin\Debug\net8.0\Encryptor.Console.exe"),
 
                 new ModuleDescriptor(
                     id: "Sync.Console",
-                    name: "Синхронизатор",
-                    description: "Синхронизатор двух папок (Удаление/Добавление файла) (Задание 1)",
+                    name: "Синхронизатор (заготовка)",
+                    description: "Пустой модуль для демонстрации подключения.",
                     relativeExePath: @"Sync.Console\bin\Debug\net8.0\Sync.Console.exe")
-
-
             };
         }
     }
