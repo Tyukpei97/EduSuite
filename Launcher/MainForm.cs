@@ -22,47 +22,44 @@ namespace Launcher
         // Ну чё тут рассказывать. Ты же гоу про экстрим мастер по CSS И ГУРУ Тильды, так что понимаешь что тут написано. А если без приколов, то это настройка окна, которое видит пользователь.
         private void InitializeComponent()
         {
-            Text = "Лаунчер пу-пу-пу";
-            StartPosition = FormStartPosition.CenterScreen;
-            Width = 800;
-            Height = 500;
-            MinimizeBox = true;
-            MaximizeBox = true;
-
-            _lvModules = new ListView
-            {
-                Dock = DockStyle.Top,
-                Height = 360,
-                FullRowSelect = true,
-                MultiSelect = false,
-                View = View.Details
-            };
-
-            _lvModules.Columns.Add("Название", 220);
-            _lvModules.Columns.Add("Описание", 440);
-            _lvModules.Columns.Add("Статус", 100);
-
-            _btnLaunch = new Button
-            {
-                Text = "Запустить",
-                Dock = DockStyle.Bottom,
-                Height = 44,
-                Enabled = false
-            };
-
+            _lvModules = new ListView();
+            _btnLaunch = new Button();
+            _lblInfo = new Label();
+            SuspendLayout();
+            // 
+            // _lvModules
+            // 
+            _lvModules.Location = new Point(0, 0);
+            _lvModules.Name = "_lvModules";
+            _lvModules.Size = new Size(121, 97);
+            _lvModules.TabIndex = 0;
+            _lvModules.UseCompatibleStateImageBehavior = false;
+            // 
+            // _btnLaunch
+            // 
+            _btnLaunch.Location = new Point(0, 0);
+            _btnLaunch.Name = "_btnLaunch";
+            _btnLaunch.Size = new Size(75, 23);
+            _btnLaunch.TabIndex = 2;
             _btnLaunch.Click += BtnLaunch_Click;
-
-            _lblInfo = new Label
-            {
-                Dock = DockStyle.Bottom,
-                Height = 28,
-                Text = "Выберите модуль и нажмите «Запустить».",
-                TextAlign = ContentAlignment.MiddleLeft
-            };
-
+            // 
+            // _lblInfo
+            // 
+            _lblInfo.Location = new Point(0, 0);
+            _lblInfo.Name = "_lblInfo";
+            _lblInfo.Size = new Size(100, 23);
+            _lblInfo.TabIndex = 1;
+            // 
+            // MainForm
+            // 
+            ClientSize = new Size(784, 461);
             Controls.Add(_lvModules);
             Controls.Add(_lblInfo);
             Controls.Add(_btnLaunch);
+            Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Лаунчер пу-пу-пу";
+            ResumeLayout(false);
 
         }
         /// <summary>

@@ -30,6 +30,8 @@ namespace Launcher
                     name: "Синхронизатор",
                     description: "Синхронизатор двух папок (Удаление/Добавление файла) (Задание 1)",
                     relativeExePath: @"Sync.Console\bin\Debug\net8.0\Sync.Console.exe")
+
+
             };
         }
     }
