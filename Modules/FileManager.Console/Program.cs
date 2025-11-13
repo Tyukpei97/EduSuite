@@ -35,8 +35,13 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("  ls [path]           — содержимое каталога (по умолчанию — текущая папка).");
             Console.WriteLine("                         path может быть относительным или абсолютным путём.");
             Console.WriteLine("  cd <path>           — смена директории (относительный или абсолютный путь)");
-            Console.WriteLine("  mkdir <name>        — создать каталог (можно с подпапками)");
-            Console.WriteLine("  touch <file>        — создать пустой файл или обновить время изменения");
+            Console.WriteLine("                         Просто \\ подразумевает переход к корню диска.");
+            Console.WriteLine("                         Чтобы перейти в папку достаточно ввести имя директории.");
+            Console.WriteLine("                         Чтобы переступить через директорую: folder\\folder_1.");
+            Console.WriteLine("                         Чтобы открать папку внутри родительской директории: \\folder\\folder1.");
+            Console.WriteLine("  mkdir <name>        — создать каталог");
+            Console.WriteLine("  touch <file>        — создать пустой файл или обновить время изменения.");
+            Console.WriteLine("                         Также, укажите тип файла.");
         }
 
         private static void Exit(IReadOnlyList<string> _)
@@ -96,16 +101,7 @@ namespace FileManager.ConsoleApp
             if (args.Count == 0)
                 throw new ArgumentException("Укажите путь: cd <path>");
 
-            string pathArg = args[0];
-
-            if (pathArg == "~")
-            {
-                var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-                if (!string.IsNullOrEmpty(home))
-                    _currentDirectory = home;
-                return;
-            }
+            string pathArg = Path.GetFullPath(args[0]);
 
             string full = ResolvePath(pathArg);
 
@@ -183,9 +179,7 @@ namespace FileManager.ConsoleApp
 
             string combined = Path.IsPathRooted(path) ? path : Path.Combine(baseDir, path);
 
-            string full = Path.GetFileName(combined);
-
-            return full;
+            return combined;
         }
 
         private static void PrintDirLine(DirectoryInfo d)
@@ -199,7 +193,7 @@ namespace FileManager.ConsoleApp
         {
             string ts = f.LastWriteTime.ToString(DateFornat, CultureInfo.InvariantCulture);
 
-            string size = f.Length.ToString("NO", CultureInfo.InvariantCulture).PadLeft(10);
+            string size = f.Length.ToString("<FILE>", CultureInfo.InvariantCulture).PadLeft(10);
 
             Console.WriteLine($"{size} {ts}, {f.Name}");
         }
@@ -216,7 +210,9 @@ namespace FileManager.ConsoleApp
         {
             Console.WriteLine("Крутейший консольный файловый менеджер");
             Console.WriteLine("Введите `help` для списка команд.");
+            Console.WriteLine("Обязательно введите `help`, для примера ввода пути к файлам.");
         }
+
 
         // ------------------------- Main -------------------------
 
