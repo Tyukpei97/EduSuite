@@ -22,7 +22,13 @@ namespace Launcher
                 new ModuleDescriptor(
                     id: "Encryptor.Console",
                     name: "Шифровщик/дешифровщик",
-                    description: "Готовый модуль для демонстрации.",
+                    description: "Доступные шифры: " +
+                    "Шифр Цезаря, \r\n" +
+                    "Шифр Виженера, \r\n" +
+                    "XOR-шифрование, \r\n" +
+                    "Base64 (кодирование/декодирование), \r\n" +
+                    "Шифр замены символов, \r\n" +
+                    "Шифр перестановки",
                     relativeExePath: @"Encryptor.Console\bin\Debug\net8.0\Encryptor.Console.exe"),
 
                 new ModuleDescriptor(
