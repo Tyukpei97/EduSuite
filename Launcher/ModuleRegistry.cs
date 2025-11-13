@@ -21,14 +21,14 @@ namespace Launcher
 
                 new ModuleDescriptor(
                     id: "Encryptor.Console",
-                    name: "Шифровщик/дешифровщик (заготовка)",
-                    description: "Пустой модуль для демонстрации подключения.",
+                    name: "Шифровщик/дешифровщик",
+                    description: "Готовый модуль для демонстрации.",
                     relativeExePath: @"Encryptor.Console\bin\Debug\net8.0\Encryptor.Console.exe"),
 
                 new ModuleDescriptor(
                     id: "Sync.Console",
-                    name: "Синхронизатор (заготовка)",
-                    description: "Пустой модуль для демонстрации подключения.",
+                    name: "Синхронизатор",
+                    description: "Готовый модуль для демонстрации.",
                     relativeExePath: @"Sync.Console\bin\Debug\net8.0\Sync.Console.exe")
             };
         }

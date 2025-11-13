@@ -167,7 +167,7 @@ namespace FileEncrypter
                         continue;
                     }
 
-                    /
+                    
                     Console.WriteLine("\nХотите продолжить работу? (1 - да, 0 - выйти)");
                     string continueChoice = Console.ReadLine();
                     if (continueChoice == "0")

@@ -262,7 +262,4 @@ namespace FileManager.ConsoleApp
         }
 
     }
-
-    static void SetColor(ConsoleColor color) => Console.ForegroundColor = color;
-    static void ResetColor() => Console.ResetColor();
 }
