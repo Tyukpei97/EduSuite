@@ -36,7 +36,7 @@ namespace FileManager.ConsoleApp
             Console.WriteLine("                         path может быть относительным или абсолютным путём.");
             Console.WriteLine("  cd <path>           — смена директории (относительный или абсолютный путь)");
             Console.WriteLine("                         Просто \\ подразумевает переход к корню диска.");
-            Console.WriteLine("                         Чтобы перейти в папку достаточно ввести имя директории.");
+            Console.WriteLine("                         Чтобы перейти в папку достаточно ввести имя директории(если вы в корне, то уже через \\folder).");
             Console.WriteLine("                         Чтобы переступить через директорую: folder\\folder_1.");
             Console.WriteLine("                         Чтобы открать папку внутри родительской директории: \\folder\\folder1.");
             Console.WriteLine("  mkdir <name>        — создать каталог");
