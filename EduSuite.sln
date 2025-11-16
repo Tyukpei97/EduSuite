@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launcher.csproj", "{FAF8AEDA-34F7-4612-A0ED-E197ECCEA712}"
 EndProject
@@ -10,6 +10,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encryptor.Console", "Modules\Encryptor.Console\Encryptor.Console.csproj", "{398723D7-0320-408F-A591-55ECEF83BD50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sync.Console", "Modules\Sync.Console\Sync.Console.csproj", "{44521212-BF1D-4337-A362-E03A686A100B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2.Core", "Modules\Task2\Task2.Core\Task2.Core.csproj", "{1CF76325-EDC5-445A-9221-A52F69BC4354}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelViewer.WinForms", "Modules\Task2\ExcelViewer.WinForms\ExcelViewer.WinForms.csproj", "{79FCD3AA-7C82-4B2F-BF4E-20634DC6AB67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinePlotter.WinForms", "Modules\Task2\LinePlotter.WinForms\LinePlotter.WinForms.csproj", "{ED8B279F-D169-46F8-A089-BC702410E047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorMixer.WinForms", "Modules\Task2\ColorMixer.WinForms\ColorMixer.WinForms.csproj", "{6B61EB54-9059-40D9-9AE4-9B99D3339A51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApp_Folder", "ConsoleApp_Folder", "{75832313-F7FD-4B1F-8007-A469B87D6EC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Launcher_Folder", "Launcher_Folder", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinForms_Folder", "WinForms_Folder", "{DEB3D068-EC21-4DCD-8ECB-346B8106FA23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +47,35 @@ Global
 		{44521212-BF1D-4337-A362-E03A686A100B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44521212-BF1D-4337-A362-E03A686A100B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44521212-BF1D-4337-A362-E03A686A100B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF76325-EDC5-445A-9221-A52F69BC4354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF76325-EDC5-445A-9221-A52F69BC4354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF76325-EDC5-445A-9221-A52F69BC4354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF76325-EDC5-445A-9221-A52F69BC4354}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79FCD3AA-7C82-4B2F-BF4E-20634DC6AB67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79FCD3AA-7C82-4B2F-BF4E-20634DC6AB67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79FCD3AA-7C82-4B2F-BF4E-20634DC6AB67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79FCD3AA-7C82-4B2F-BF4E-20634DC6AB67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED8B279F-D169-46F8-A089-BC702410E047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8B279F-D169-46F8-A089-BC702410E047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8B279F-D169-46F8-A089-BC702410E047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8B279F-D169-46F8-A089-BC702410E047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B61EB54-9059-40D9-9AE4-9B99D3339A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B61EB54-9059-40D9-9AE4-9B99D3339A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B61EB54-9059-40D9-9AE4-9B99D3339A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B61EB54-9059-40D9-9AE4-9B99D3339A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FAF8AEDA-34F7-4612-A0ED-E197ECCEA712} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{863AB76A-647E-44F4-9894-B0CA0E5FF387} = {75832313-F7FD-4B1F-8007-A469B87D6EC8}
+		{398723D7-0320-408F-A591-55ECEF83BD50} = {75832313-F7FD-4B1F-8007-A469B87D6EC8}
+		{44521212-BF1D-4337-A362-E03A686A100B} = {75832313-F7FD-4B1F-8007-A469B87D6EC8}
+		{1CF76325-EDC5-445A-9221-A52F69BC4354} = {DEB3D068-EC21-4DCD-8ECB-346B8106FA23}
+		{79FCD3AA-7C82-4B2F-BF4E-20634DC6AB67} = {DEB3D068-EC21-4DCD-8ECB-346B8106FA23}
+		{ED8B279F-D169-46F8-A089-BC702410E047} = {DEB3D068-EC21-4DCD-8ECB-346B8106FA23}
+		{6B61EB54-9059-40D9-9AE4-9B99D3339A51} = {DEB3D068-EC21-4DCD-8ECB-346B8106FA23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {119186E5-C122-4E39-A99B-5ADBF50ABC86}

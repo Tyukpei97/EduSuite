@@ -1,37 +1,32 @@
-﻿## Структура
-EduSuite.sln
-Launcher/
+﻿# EduSuite
+
+Модульный учебный проект по C#/.NET 8:
+
+- общий **WinForms-лаунчер** для запуска учебных модулей;
+- набор **консольных приложений**:
+  - файловый менеджер;
+  - шифровщик/дешифровщик;
+  - синхронизатор папок.
+
+Проект используется как задание по учебной практике: тренировка работы с .NET 8, WinForms, консольными приложениями, файловой системой и процессами.
+
+---
+
+## Структура решения
+
+```text
+EduSuite.sln          – решение Visual Studio
+
+Launcher/             – WinForms-лаунчер модулей
+  Program.cs          – точка входа, запуск MainForm
+  MainForm.cs         – главное окно, список модулей и кнопка «Запустить»
+  ModuleDescriptor.cs – DTO-описание модуля (Id, Name, Description, RelativeExePath)
+  ModuleRegistry.cs   – реестр всех модулей, возвращает список ModuleDescriptor
+  ProcessRunner.cs    – поиск exe/проекта модуля и запуск процесса
+
 Modules/
-	FileManager.Console/
-	Encryptor.Console/
-	Sync.Console/
-Docs/
-	README.md
+  FileManager.Console/ – консольный файловый менеджер
+  Encryptor.Console/   – шифровщик/дешифровщик текстовых файлов
+  Sync.Console/        – синхронизатор двух папок
 
-
-
-## Сборка и запуск (VS)
-1. Откройте `EduSuite.sln` в Visual Studio 2022+.
-2. Установите `Launcher` как Startup Project.
-3. Сборка: **Build → Build Solution**.
-4. Запуск лаунчера: **Debug → Start Without Debugging**.
-
----
-
-# Ключевые места кода 
-  # Launcher
-  `Program.cs` (лаунчер):  
-  `ApplicationConfiguration.Initialize();` — включает современные настройки WinForms в .NET 8.  
-  `Application.Run(new MainForm());` — стартует главное окно.
-
-- `MainForm`:
-  - Создаём `ListView` в режиме `Details` → три колонки (Название/Описание/Статус).
-  - Кнопка **Запустить** отключена, пока не выбран модуль.
-  - `LoadModules()` берёт данные из `ModuleRegistry` и заполняет список.
-  - Обработчик кнопки пока показывает **MessageBox** (заглушка). Настоящий запуск процесса добавим позже.
-
-- `ModuleRegistry`: статический список модулей. Пути указаны **относительно дистрибутива**:  
-  `.\Modules\<Id>\<ExeName>.exe` — так мы легко перейдём к пост-build копированию/паблишу.
-
----
-
+Docs/                 – учебные материалы/отчёты (если есть)
