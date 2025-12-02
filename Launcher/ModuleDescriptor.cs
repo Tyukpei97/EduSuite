@@ -12,12 +12,15 @@ namespace Launcher
         public string Description { get; }
         public string RelativeExePath { get; }
 
-        public ModuleDescriptor(string id, string name, string description, string relativeExePath)
+        public string SolutionPathProj { get; }
+
+        public ModuleDescriptor(string id, string name, string description, string relativeExePath, string solutionPathProj)
         {
             Id = id;
             Name = name;
             Description = description;
             RelativeExePath = relativeExePath;
+            SolutionPathProj = solutionPathProj;
         }
     }
 }

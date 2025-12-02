@@ -14,11 +14,30 @@ namespace Launcher
 {
     public class MainForm : Form
     {
+        private TextBox _descriptionBox;
         // Короче, Меченый, эти переменные являются ссылками на UI элементы из "System.Windows.Forms". Соответственно: список модулей, кнопка Запуска, информационная строка.
         private ListView _lvModules;
         private Button _btnLaunch;
         private Label _lblInfo;
 
+        private void ModulesListViewOnSelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (_lvModules.SelectedItems.Count == 0)
+            {
+                _descriptionBox.Text = string.Empty;
+                _btnLaunch.Enabled = false;
+                return;
+            }
+
+            var item = _lvModules.SelectedItems[0];
+
+            if (item.Tag is ModuleDescriptor descriptor)
+            {
+                _descriptionBox.Text = descriptor.Description;
+            }
+
+            _btnLaunch.Enabled = true;
+        }
         // Ну чё тут рассказывать. Ты же гоу про экстрим мастер по CSS И ГУРУ Тильды, так что понимаешь что тут написано. А если без приколов, то это настройка окна, которое видит пользователь.
         private void InitializeComponent()
         {
@@ -37,6 +56,7 @@ namespace Launcher
                 MultiSelect = false,
                 View = View.Details
             };
+            _lvModules.SelectedIndexChanged += ModulesListViewOnSelectedIndexChanged;
 
             _lvModules.Columns.Add("Название", 220);
             _lvModules.Columns.Add("Описание", 440);
@@ -62,6 +82,23 @@ namespace Launcher
 
             Controls.Add(_lvModules);
             Controls.Add(_lblInfo);
+            Controls.Add(_btnLaunch);
+
+            _descriptionBox = new TextBox
+            {
+                Dock = DockStyle.Bottom,
+                Height = 80,
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Vertical,
+                BackColor = SystemColors.Window,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            _descriptionBox.Text = "Выберите модуль, чтобы увидеть полное описание.";
+
+            Controls.Add(_descriptionBox);
+            Controls.Add(_lvModules); 
             Controls.Add(_btnLaunch);
 
         }
@@ -98,6 +135,10 @@ namespace Launcher
 
                 _lvModules.Items.Add(item);
             }
+
+            _lvModules.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            _lvModules.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
         }
 
         private static void SetStatus(ListViewItem item, string status)

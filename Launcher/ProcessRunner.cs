@@ -69,7 +69,7 @@ namespace Launcher
 
             if (solutionRoot is not null)
             {
-                string csproj = Path.Combine(solutionRoot, "Modules", descriptor.Id, $"{descriptor.Id}.csproj");
+                string csproj = Path.Combine(solutionRoot, "Modules", descriptor.SolutionPathProj);
                 if (File.Exists(csproj))
                 {
                     var psi = new ProcessStartInfo

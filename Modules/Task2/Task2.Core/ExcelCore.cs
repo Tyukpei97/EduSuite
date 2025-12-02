@@ -95,29 +95,29 @@ namespace Task2.Core
                 {
                     var usedRange = ws.RangeUsed();
                     if (usedRange == null)
-                    {
                         continue;
-                    }
 
                     int rowCount = usedRange.RowCount();
                     int colCount = usedRange.ColumnCount();
 
+                    // --- 1. Определяем строку, где начинаются заголовки ---
+                    int headerRow = DetectHeaderRow(usedRange);
+
                     var columns = new List<string>();
                     var rows = new List<IReadOnlyList<string>>();
 
-                    // Первая строка — заголовки
+                    // --- 2. Читаем заголовки ---
                     for (int c = 1; c <= colCount; c++)
                     {
-                        string header = usedRange.Cell(1, c).GetString();
+                        string header = usedRange.Cell(headerRow, c).GetString();
                         if (string.IsNullOrWhiteSpace(header))
                             header = $"Колонка {c}";
-
 
                         columns.Add(header);
                     }
 
-                    // Остальные строки — данные
-                    for (int r = 2; r <= rowCount; r++)
+                    // --- 3. Читаем данные ниже заголовков ---
+                    for (int r = headerRow + 1; r <= rowCount; r++)
                     {
                         var row = new string[colCount];
 
@@ -126,7 +126,19 @@ namespace Task2.Core
                             row[c - 1] = usedRange.Cell(r, c).GetString();
                         }
 
-                        rows.Add(row);
+                        // по желанию можно выкидывать полностью пустые строки
+                        bool allEmpty = true;
+                        for (int i = 0; i < row.Length; i++)
+                        {
+                            if (!string.IsNullOrWhiteSpace(row[i]))
+                            {
+                                allEmpty = false;
+                                break;
+                            }
+                        }
+
+                        if (!allEmpty)
+                            rows.Add(row);
                     }
 
                     worksheets.Add(new WorksheetModel(ws.Name, columns, rows));
@@ -134,6 +146,33 @@ namespace Task2.Core
             }
 
             return new SpreadsheetModel(filePath, worksheets);
+        }
+
+        private static int DetectHeaderRow(IXLRange usedRange)
+        {
+            int rowCount = usedRange.RowCount();
+            int colCount = usedRange.ColumnCount();
+
+            const int minNonEmptyCells = 3; // порог "похожести" на заголовок
+
+            for (int r = 1; r <= rowCount; r++)
+            {
+                int nonEmpty = 0;
+
+                for (int c = 1; c <= colCount; c++)
+                {
+                    var text = usedRange.Cell(r, c).GetString();
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        nonEmpty++;
+                        if (nonEmpty >= minNonEmptyCells)
+                            return r;
+                    }
+                }
+            }
+
+            // если ничего не нашли — считаем заголовком самую первую строку
+            return 1;
         }
     }
 }
