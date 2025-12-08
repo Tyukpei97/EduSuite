@@ -14,11 +14,18 @@ namespace Launcher
 {
     public class MainForm : Form
     {
-        private TextBox _descriptionBox;
         // Короче, Меченый, эти переменные являются ссылками на UI элементы из "System.Windows.Forms". Соответственно: список модулей, кнопка Запуска, информационная строка.
+        private TextBox _descriptionBox;
         private ListView _lvModules;
         private Button _btnLaunch;
         private Label _lblInfo;
+
+        private ListViewGroup _groupTask1;
+        private ListViewGroup _groupTask2;
+        private ListViewGroup _groupTask3;
+        private ListViewGroup _groupTask4;
+        private ListViewGroup _groupTask5;
+        private ListViewGroup _groupTask6;
 
         private void ModulesListViewOnSelectedIndexChanged(object? sender, EventArgs e)
         {
@@ -45,13 +52,14 @@ namespace Launcher
             StartPosition = FormStartPosition.CenterScreen;
             Width = 800;
             Height = 500;
+            FormBorderStyle = FormBorderStyle.Sizable;
+            MinimumSize = new Size(800, 500);
             MinimizeBox = true;
             MaximizeBox = true;
 
             _lvModules = new ListView
             {
-                Dock = DockStyle.Top,
-                Height = 360,
+                Dock = DockStyle.Fill,
                 FullRowSelect = true,
                 MultiSelect = false,
                 View = View.Details
@@ -61,6 +69,18 @@ namespace Launcher
             _lvModules.Columns.Add("Название", 220);
             _lvModules.Columns.Add("Описание", 440);
             _lvModules.Columns.Add("Статус", 100);
+
+            _groupTask1 = new ListViewGroup("Задание 1", HorizontalAlignment.Left);
+            _groupTask2 = new ListViewGroup("Задание 2", HorizontalAlignment.Left);
+            _groupTask3 = new ListViewGroup("Задание 3", HorizontalAlignment.Left);
+
+            _lvModules.Groups.AddRange(new[]
+            {
+                _groupTask1,
+                _groupTask2,
+                _groupTask3
+            });
+            _lvModules.ShowGroups = true;
 
             _btnLaunch = new Button
             {
@@ -97,8 +117,9 @@ namespace Launcher
 
             _descriptionBox.Text = "Выберите модуль, чтобы увидеть полное описание.";
 
+            Controls.Add(_lvModules);
             Controls.Add(_descriptionBox);
-            Controls.Add(_lvModules); 
+            Controls.Add(_lblInfo);
             Controls.Add(_btnLaunch);
 
         }
@@ -119,6 +140,7 @@ namespace Launcher
         /// </summary>
         private void LoadModules()
         {
+            _lvModules.BeginUpdate();
             _lvModules.Items.Clear();
 
             foreach (var m in ModuleRegistry.GetAll())
@@ -130,15 +152,62 @@ namespace Launcher
                     "Готов"
                 })
                 {
-                    Tag = m
+                    Tag = m,
+                    Group = GetGroupForModule(m)
                 };
 
                 _lvModules.Items.Add(item);
             }
 
-            _lvModules.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            _lvModules.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            _lvModules.EndUpdate();
 
+            AddjustColums();
+
+        }
+
+        private void AddjustColums()
+        {
+            if (_lvModules.Columns.Count < 3)
+            {
+                return;
+            }
+
+            var nameColumn = _lvModules.Columns[0];
+            var descriptionColumn = _lvModules.Columns[1];
+            var statusColumn = _lvModules.Columns[2];
+
+            const int nameWidth = 230;
+            nameColumn.Width = nameWidth;
+
+            // подстраиваем ширину колонки статуса под содержимое
+            _lvModules.AutoResizeColumn(2, ColumnHeaderAutoResizeStyle.ColumnContent);
+            int statusWidth = statusColumn.Width;
+
+            int totalWidth = _lvModules.ClientSize.Width;
+            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth;
+
+            int descriptionWidth = totalWidth - nameWidth - statusWidth - scrollbarWidth;
+            if (descriptionWidth < 120)
+            {
+                descriptionWidth = 120;
+            }
+
+            descriptionColumn.Width = descriptionWidth;
+        }
+
+        private ListViewGroup GetGroupForModule(ModuleDescriptor module)
+        {
+            if (module.Name.StartsWith("Task2", StringComparison.OrdinalIgnoreCase))
+            {
+                return _groupTask2;
+            }
+
+            if (module.Name.StartsWith("Task3", StringComparison.OrdinalIgnoreCase))
+            {
+                return _groupTask3;
+            }
+
+            return _groupTask1;
         }
 
         private static void SetStatus(ListViewItem item, string status)
@@ -147,6 +216,11 @@ namespace Launcher
             {
                 item.SubItems[2].Text = status;
             }
+        }
+
+        private void MainForm_Resize(object? sender, EventArgs e)
+        {
+            AddjustColums();
         }
         // Здесь как раз и происходит запуск модуля.
         private void BtnLaunch_Click(object? sender, EventArgs e)
@@ -220,6 +294,7 @@ namespace Launcher
             InitializeComponent();
             LoadModules();
             _lvModules.SelectedIndexChanged += SelectedIndexChanged;
+            Resize += MainForm_Resize;
         }
     }
 }

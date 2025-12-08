@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 /// <summary>
 /// Вот помнишь наш шаблон, аля, паспорт модулей. Вот этот файл буквально возвращает список таких паспортов, чтобы программа их читала и выводила в лаунчере.
@@ -65,7 +66,29 @@ namespace Launcher
                         "Смешивает произвольное количество HEX-цветов. " +
                         "Позволяет добавлять/удалять цвета, валидирует HEX и показывает результирующий цвет.",
                     relativeExePath: @"Task2\ColorMixer.WinForms\bin\Debug\net8.0-windows\ColorMixer.WinForms.exe",
-                    solutionPathProj : @"Task2\ColorMixer.WinForms\ColorMixer.WinForms.csproj")
+                    solutionPathProj : @"Task2\ColorMixer.WinForms\ColorMixer.WinForms.csproj"),
+
+                new ModuleDescriptor(
+                    id: "link-shortener",
+                    name: "Task3: Сокращатель ссылок",
+                    description: "GUI имитация сокращателя ссылок с хранением в JSON.",
+                    relativeExePath: @"Task3\LinkShortener.WinForms\bin\Debug\net8.0-windows\LinkShortener.WinForms.exe",
+                    solutionPathProj: @"Task3\LinkShortener.WinForms\LinkShortener.WinForms.csproj"),
+
+                new ModuleDescriptor(
+                    id: "clients-db",
+                    name: "Task3: База клиентов",
+                    description: "GUI-\"Excel\" для работы с базой клиентов в JSON.",
+                    relativeExePath: @"Task3\ClientsDb.WinForms\bin\Debug\net8.0-windows\ClientsDb.WinForms.exe",
+                    solutionPathProj: @"Task3\ClientsDb.WinForms\ClientsDb.WinForms.csproj"),
+
+                new ModuleDescriptor(
+                    id: "function-svg-plotter",
+                    name: "Task3: График y = f(x)",
+                    description: "Построение графика на отрезке -10..10 и сохранение в SVG.",
+                    relativeExePath: @"Task3\FunctionSvgPlotter.WinForms\bin\Debug\net8.0-windows\FunctionSvgPlotter.WinForms.exe",
+                    solutionPathProj: @"Task3\FunctionSvgPlotter.WinForms\FunctionSvgPlotter.WinForms.csproj")
+
             };
         }
     }
