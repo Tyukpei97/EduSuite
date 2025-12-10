@@ -73,12 +73,14 @@ namespace Launcher
             _groupTask1 = new ListViewGroup("Задание 1", HorizontalAlignment.Left);
             _groupTask2 = new ListViewGroup("Задание 2", HorizontalAlignment.Left);
             _groupTask3 = new ListViewGroup("Задание 3", HorizontalAlignment.Left);
+            _groupTask4 = new ListViewGroup("Задание 4", HorizontalAlignment.Left); 
 
             _lvModules.Groups.AddRange(new[]
             {
                 _groupTask1,
                 _groupTask2,
-                _groupTask3
+                _groupTask3,
+                _groupTask4
             });
             _lvModules.ShowGroups = true;
 
@@ -205,6 +207,10 @@ namespace Launcher
             if (module.Name.StartsWith("Task3", StringComparison.OrdinalIgnoreCase))
             {
                 return _groupTask3;
+            }
+            if (module.Name.StartsWith("Task4", StringComparison.OrdinalIgnoreCase))
+            {
+                return _groupTask4;
             }
 
             return _groupTask1;

@@ -291,8 +291,6 @@ namespace LinkShortener.WinForms
             {
                 ShortCode = code,
                 FullUrl = fullUrl,
-                CreatedAt = DateTime.Now,
-                OpenCount = 0
             };
 
             _records.Insert(0, record);
@@ -309,7 +307,6 @@ namespace LinkShortener.WinForms
                 return;
             }
 
-            // Берём всегда первый столбец (код)
             var row = _dgvLinks.Rows[e.RowIndex];
             string? code = row.Cells[0].Value?.ToString();
 
@@ -350,12 +347,10 @@ namespace LinkShortener.WinForms
                 return;
             }
 
-            // Ищем сначала в текущем списке
             ShortLinkRecord? record = _records
                 .FirstOrDefault(
                     r => string.Equals(r.ShortCode?.Trim(), code, StringComparison.OrdinalIgnoreCase));
 
-            // Если не нашли – пробуем перечитать файл
             if (record == null)
             {
                 try

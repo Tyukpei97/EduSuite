@@ -87,8 +87,28 @@ namespace Launcher
                     name: "Task3: График y = f(x)",
                     description: "Построение графика на отрезке -10..10 и сохранение в SVG.",
                     relativeExePath: @"Task3\FunctionSvgPlotter.WinForms\bin\Debug\net8.0-windows\FunctionSvgPlotter.WinForms.exe",
-                    solutionPathProj: @"Task3\FunctionSvgPlotter.WinForms\FunctionSvgPlotter.WinForms.csproj")
+                    solutionPathProj: @"Task3\FunctionSvgPlotter.WinForms\FunctionSvgPlotter.WinForms.csproj"),
 
+                new ModuleDescriptor(
+                    id: "Task4.MazeGenerator.WinForms",
+                    name: "Task4: Генератор лабиринтов",
+                    description: "Генерирует случайный проходимый лабиринт (0 – дорога, 1 – стена, 5 – вход, 6 – выход).",
+                    relativeExePath: @"Task4\MazeGenerator.WinForms\bin\Debug\net8.0-windows\MazeGenerator.WinForms.exe",
+                    solutionPathProj: @"Task4\MazeGenerator.WinForms\MazeGenerator.WinForms.csproj"),
+
+                new ModuleDescriptor(
+                    id: "Task4.MazePathFinder.WinForms",
+                    name: "Task4: Поиск пути в лабиринте",
+                    description: "Принимает двумерный массив и строит маршрут от входа до выхода в виде команд движения.",
+                    relativeExePath: @"Task4\MazePathFinder.WinForms\bin\Debug\net8.0-windows\MazePathFinder.WinForms.exe",
+                    solutionPathProj: @"Task4\MazePathFinder.WinForms\MazePathFinder.WinForms.csproj"),
+
+                new ModuleDescriptor(
+                    id: "Task4.MazePathValidator.WinForms",
+                    name: "Task4: Проверка маршрута",
+                    description: "Проверяет, приводит ли введённый набор команд к выходу из лабиринта.",
+                    relativeExePath: @"Task4\MazePathValidator.WinForms\bin\Debug\net8.0-windows\MazePathValidator.WinForms.exe",
+                    solutionPathProj: @"Task4\MazePathValidator.WinForms\MazePathValidator.WinForms.csproj")
             };
         }
     }

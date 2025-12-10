@@ -564,13 +564,11 @@ namespace FunctionSvgPlotter.WinForms
             float sx = plotWidth / xRange;
             float sy = plotHeight / yRange;
 
-            // --- Адаптивный шаг сетки ---
             float xStep = settings.GridStep <= 0f ? xRange : settings.GridStep;
             float yStep = settings.GridStep <= 0f ? yRange : settings.GridStep;
 
             const int maxLines = 25;
 
-            // по X
             if (xStep > 0f && xRange / xStep > maxLines)
             {
                 float factor = (float)Math.Ceiling(xRange / (maxLines * xStep));
@@ -582,7 +580,6 @@ namespace FunctionSvgPlotter.WinForms
                 xStep *= factor;
             }
 
-            // по Y
             if (yStep > 0f && yRange / yStep > maxLines)
             {
                 float factor = (float)Math.Ceiling(yRange / (maxLines * yStep));
@@ -600,10 +597,8 @@ namespace FunctionSvgPlotter.WinForms
             using var font = new Font("Segoe UI", 8f);
             using var textBrush = new SolidBrush(Color.Black);
 
-            // ---- Сетка + подписи ----
             if (settings.ShowGrid && xStep > 0f && yStep > 0f)
             {
-                // вертикальные линии и подписи по X
                 float xStart = (float)Math.Ceiling(settings.XMin / xStep) * xStep;
                 for (float x = xStart; x <= settings.XMax; x += xStep)
                 {
@@ -615,7 +610,6 @@ namespace FunctionSvgPlotter.WinForms
                     g.DrawString(x.ToString("0"), font, textBrush, sxPos - 8, yLabel);
                 }
 
-                // горизонтальные линии и подписи по Y
                 float yStart = (float)Math.Ceiling(settings.YMin / yStep) * yStep;
                 for (float y = yStart; y <= settings.YMax; y += yStep)
                 {
@@ -628,7 +622,6 @@ namespace FunctionSvgPlotter.WinForms
                 }
             }
 
-            // ---- Оси ----
             if (settings.ShowAxes)
             {
                 if (settings.XMin <= 0 && settings.XMax >= 0)
@@ -644,7 +637,6 @@ namespace FunctionSvgPlotter.WinForms
                 }
             }
 
-            // ---- График функции ----
             if (points.Count < 2)
             {
                 return;

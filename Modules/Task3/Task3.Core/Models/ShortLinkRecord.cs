@@ -6,8 +6,5 @@ namespace Task3.Core.Models
 
         public string FullUrl { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; }
-
-        public int OpenCount { get; set; }
     }
 }
